@@ -1,7 +1,6 @@
-from PySide6.QtWidgets import QApplication, QComboBox, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QApplication, QComboBox, QHBoxLayout, QVBoxLayout, QWidget, QFrame, QFileDialog
 from PySide6.QtWebEngineWidgets import QWebEngineView
-
-# 어떻게 파일을 비교할까?
+from PySide6.QtCore import Qt
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
@@ -12,15 +11,31 @@ class MainWindow(QWidget):
         self.combo_box.currentTextChanged.connect(self.load_file)
 
         self.web_view = QWebEngineView()
+        self.detail_view = QWebEngineView()
+        
+        # Set a simple border style to detail view
+        self.detail_view.setStyleSheet("border: 1px solid lightgray;")
 
-        layout = QVBoxLayout()
-        layout.addWidget(self.combo_box)
-        layout.addWidget(self.web_view)
+        layout = QHBoxLayout()
+
+        left_layout = QVBoxLayout()
+        left_layout.addWidget(self.combo_box)
+        left_layout.addWidget(self.web_view)
+
+        layout.addLayout(left_layout)
+        layout.addWidget(self.detail_view)
+
         self.setLayout(layout)
 
     def load_file(self, text):
-        # Adjust this method to load the markdown file based on the selected category
-        with open(f"{text}.md", "r") as file:
+        # Let the user choose the standard file and the file to compare
+        standard_file, _ = QFileDialog.getOpenFileName(self, "Select Standard File", "", "Markdown Files (*.md)")
+        compare_file, _ = QFileDialog.getOpenFileName(self, "Select File to Compare", "", "Markdown Files (*.md)")
+
+        # TODO: Compare the files and mark differences
+        # This is a complex task and needs a custom solution
+
+        with open(standard_file, "r") as file:
             content = file.read()
 
         html = f"""
