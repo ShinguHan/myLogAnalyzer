@@ -1,0 +1,16 @@
+[Web발신]
+"Error","1","19-Jul-2023 11:16:08:544","M2ELFT15101","EmuDeviceServer(EmuDefaultDeviceServer):classmcs.com.sockets.PersistentServerSocket$1@3d10191d","","comerror","SecsProtocolLogger.log","Error received from the persistent socket. Address already in use: JVM_Bind on host AllHost:15003","","1689790568544"
+"Error","1","19-Jul-2023 11:15:58:531","M2ELFT15101","EmuDeviceServer(EmuDefaultDeviceServer):classmcs.com.sockets.PersistentServerSocket$1@3d10191d","","comerror","SecsProtocolLogger.log","Error received from the persistent socket. Accept timed out on host AllHost:15003","","1689790558531"
+"Error","1","19-Jul-2023 11:14:48:438","M2ELFT15101","EmuDeviceServer(EmuDefaultDeviceServer):classmcs.com.sockets.PersistentServerSocket$1@3d10191d","","comerror","SecsProtocolLogger.log","Error received from the persistent socket. Address already in use: JVM_Bind on host AllHost:15003","","1689790488438"
+"Info","1","19-Jul-2023 11:14:10:244","M2ELFT15101","DeviceServer(DefaultDeviceServer):HeartbeatThread-M2ELFT15101","","CommunicationState","MCSCompliantDevice.setCommunicationState","Setting Communication State to: Communicating","","1689790450244"
+"Info","1","19-Jul-2023 11:14:10:244","M2ELFT15101","DeviceServer(DefaultDeviceServer):HeartbeatThread-M2ELFT15101","","CommunicationState","GenericMCSDevice.setControllerState","Setting Controller State to: Init","","1689790450244"
+"Com","1","19-Jul-2023 11:14:10:244","M2ELFT15101","DeviceServer(DefaultDeviceServer):HsmsRecv/192.168.100.40:15003","","commessage","SecsProtocolLogger.logMessage","--> Formatted Status Data - TSCState: ","Wbit(0) S01F04 SysBytes(35)
+<L[0]
+>
+","1689790450244"
+"Com","1","19-Jul-2023 11:14:10:228","M2ELFT15101","DeviceServer(DefaultDeviceServer):HsmsSend/192.168.100.40:15003","","commessage","SecsProtocolLogger.logMessage","<-- Selected Equipment Status Request : 73 - TSCState","Wbit(1) S01F03 SysBytes(35)
+<L[1]
+  <U2 73>
+>
+","1689790450228"
+"Info","1","19-Jul-2023 11:14:10:228",
