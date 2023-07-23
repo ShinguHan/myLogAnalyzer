@@ -1,6 +1,18 @@
-from PySide6.QtWidgets import QApplication, QComboBox, QHBoxLayout, QVBoxLayout, QWidget, QFrame, QFileDialog, QPushButton
+from PySide6.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QHBoxLayout,
+    QVBoxLayout,
+    QWidget,
+    QFrame,
+    QFileDialog,
+    QPushButton,
+)
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtCore import Qt
+import csv
+import re
+
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
@@ -15,7 +27,7 @@ class MainWindow(QWidget):
 
         self.web_view = QWebEngineView()
         self.detail_view = QWebEngineView()
-        
+
         # Set a simple border style to detail view
         self.detail_view.setStyleSheet("border: 1px solid lightgray;")
 
@@ -33,24 +45,28 @@ class MainWindow(QWidget):
 
     def load_standard_file(self, text):
         # Let the user choose the standard file
-        self.standard_file, _ = QFileDialog.getOpenFileName(self, "Select Standard File", "", "Markdown Files (*.md)")
+        self.standard_file, _ = QFileDialog.getOpenFileName(
+            self, "Select Standard File", "", "Markdown Files (*.md)"
+        )
         self.load_file(self.standard_file)
 
     def load_compare_file(self):
         # Let the user choose the file to compare
-        compare_file, _ = QFileDialog.getOpenFileName(self, "Select File to Compare", "", "Markdown Files (*.md)")
+        compare_file, _ = QFileDialog.getOpenFileName(
+            self, "Select File to Compare", "", "Markdown Files (*.csv)"
+        )
         differences = self.compare_files(self.standard_file, compare_file)
         self.load_file(self.standard_file, differences)
 
     def load_file(self, file, differences=[]):
-        with open(file, "r") as file:
+        with open(file, "r", encoding="utf-8") as file:
             content = file.read()
 
         html = f"""
         <!DOCTYPE html>
         <html>
         <head>
-            <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+            <script src="http://localhost:8000/static/mermaid.min.js"></script>
             <style>
                 .difference {{
                     fill: red !important;
@@ -98,12 +114,32 @@ class MainWindow(QWidget):
         self.web_view.setHtml(html)
 
     def compare_files(self, standard_file, compare_file):
-        with open(standard_file, "r") as sf, open(compare_file, "r") as cf:
+        with open(standard_file, "r", encoding="utf-8") as sf:
             standard_lines = sf.readlines()
-            compare_lines = cf.readlines()
 
-        # Find the lines that exist in the standard file but not in the compare file at the same position
-        differences = [i for i in range(len(standard_lines)) if i >= len(compare_lines) or standard_lines[i] != compare_lines[i]]
+        with open(compare_file, "r", encoding="utf-8") as cf:
+            lines = cf.readlines()
+            compare_data = [line.split(",") for line in lines]
+
+        for str in compare_data:
+            print(str)
+
+        # Extract CEID values from the standard file
+        standard_ceids = [
+            re.search(r"CEID = (\d+)", line).group(1)
+            for line in standard_lines
+            if "S6F11" in line
+        ]
+
+        # Extract CEID values from the compare file
+        compare_ceids = [
+            re.search(r"<U2 (\d+)>", line[7]).group(1)
+            for line in compare_data
+            if line[0] == '"Com"' and "S01F03" in line[7]
+        ]
+
+        # Find the CEIDs that exist in the standard file but not in the compare file
+        differences = [ceid for ceid in standard_ceids if ceid not in compare_ceids]
 
         return differences
 
